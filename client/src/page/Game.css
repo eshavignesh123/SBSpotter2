@@ -1,0 +1,66 @@
+/* Game.css */
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top:150px;
+}
+
+.game-board {
+  position: relative;
+  width: 100%;
+}
+
+.game-board img {
+  width: 100%;
+}
+
+.marker {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  z-index: 10;
+}
+
+.timer-box {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 5px;
+  z-index: 10;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.submit-points-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.submit-points-box {
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Add more styles as needed */
