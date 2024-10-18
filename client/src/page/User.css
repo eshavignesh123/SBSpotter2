@@ -1,0 +1,19 @@
+.user-body{
+    background-color: black;
+    margin: 0;
+    padding: 0;
+}
+
+.user-info-box{
+    background-color: #D5b608;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:10px;
+    border-radius:15px;
+    border: solid;
+    border-color: #7a702E;
+    margin-bottom: 20px;
+}

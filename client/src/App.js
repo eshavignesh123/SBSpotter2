@@ -1,8 +1,4 @@
-//fix the bug where user signs in empty with wrong passsword
-//fix bug where if you sign out it redirects url to /?
-//fix bug where program stops after putting in wrong info
 //Put in coordinates for pictures
-//Description for SBSpotter
 //Enable only SBStudents
 //Profile Picture
 //fix bug where user name is still there after signing out

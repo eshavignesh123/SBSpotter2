@@ -16,26 +16,26 @@ function SearchUser() {
 
     // Assuming searchData is an array of objects and each object has a 'name' property
     return (
-        <div>
+        <div className= "home-body">
 
-            <h1>Search Results</h1>
 
             <div className="d-flex align-items-center  justify-content-center vh-100">
                 <div className="d-flex flex-column align-items-center" style={{ maxWidth: '400px' }}>
+                    <h1 style={{fontSize: "3.5rem", color: "#D5b608"}}>Search Results</h1>
 
                     
 
-                    {searchData.firstName === 'User Not Found' ? (
+                    {!searchData ? (
                         
                         <h1>No User Exists</h1>
                     ):(
                         <>
-                            <h1>{searchData.firstName} {searchData.lastName}</h1>
-                            <p>Email: {searchData.email}</p>
+                            <h1 style ={{color:"#D5b608"}}>{searchData.firstName} {searchData.lastName}</h1>
+                            <p style ={{color:"white", fontSize:"20px", fontWeight: 600}}>Email: {searchData.email}</p>
 
                             {searchData.points === Number.MAX_VALUE ? (
-                                <p>High Score: They have not played a game yet</p>
-                            ):<p>High Score: {searchData.points}</p>
+                                <p style ={{color:"white", fontSize:"20px", fontWeight: 600}}>High Score: They have not played a game yet</p>
+                            ):<p style ={{color:"white", fontSize:"20px", fontWeight: 600}}>High Score: {searchData.points}</p>
                             }
                         
                         </>

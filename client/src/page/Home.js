@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import './Home.css'; 
 
 function Home({ handleLogin }) {
   const [loginData, setLoginData] = useState(null);
@@ -18,26 +19,32 @@ function Home({ handleLogin }) {
   }, []); // Empty dependency array ensures this effect runs only once when the component mounts
 
   return (
-    <div className="d-flex flex-column justify-content-center align-items-center vh-100">
-      <h1>SBSpotter</h1>
+    <div className="d-flex flex-column justify-content-center align-items-center vh-100 home-body">
       
       {/* Render data if available */}
       {loginData ? (
-        <div className="d-flex flex-column align-items-center w-100">
-          <p>Welcome {loginData.firstName} {loginData.lastName}!</p>
-          <div className="d-flex flex-row justify-content-between" style={{ width: "35%" }}>
-            <Link to="/gamestart" className="btn btn-info">Start Game</Link>
-            <Link to="/userprofile" className="btn btn-info">User Profile</Link>
-            <Link to="/leaderboard" className="btn btn-info">Leaderboard</Link>
+        <div className="d-flex flex-column align-items-center">
+          <h1 className="title">SBSpotter</h1>
+
+          <p className="welcome-desc">Welcome {loginData.firstName} {loginData.lastName}!</p>
+          <div className="d-flex flex-row justify-content-between" style = {{width: "80%"}}> 
+            <Link to="/gamestart" className="click-button"><b>Start Game</b></Link>
+            <Link to="/userprofile" className="click-button"><b>User Profile</b></Link>
+            <Link to="/leaderboard" className="click-button"><b>Leaderboard</b></Link>
           </div>
         </div>
       ): (
-        <div>
-          <h4>Learn your way around SBHS!</h4>
 
-          <div className="d-flex flex-column align-items-center">
-            <Link to="/signup" className="btn btn-info">Play a Game</Link>
+        <div className="d-flex flex-row justify-content-between align-items-center" style={{width:"80%"}}>
+          <div className="d-flex flex-column justify-content-left">
+            <h1 className="title">SBSpotter</h1>
+            <h4 className="desc">Learn your way around SBHS!</h4>
+
+            <div>
+              <Link to="/signup"><button className="buttonSign">Play a Game</button></Link>
+            </div>
           </div>
+          <img src="/webIcon.png" alt="SBHS" style={{ width: '30%', height: '100%' }} />
         </div>
       )}
     </div>

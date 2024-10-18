@@ -7,14 +7,19 @@ const Database = require('dbcmps369');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const serverless = require('serverless-http');
+
 
 const app = express();
+module.exports.handler = serverless(app);
+
 const port = 5000;
 app.use(cors({
 
     origin: 'http://localhost:3000',
     credentials: true
   }));
+
 
 app.use(express.static('build'));
 
@@ -57,33 +62,41 @@ app.get("/api/leaderboard", async (req, res) => {
     const leaderboardData = await db.db.all(sql);
     res.json(leaderboardData);
 });
-
-app.post("/signin", async (req, res)=>{
-    
-    console.log('Received data:', postData);
-    res.json({ message: 'Data received successfully' });
-
-
-    
+app.post("/signin", async (req, res) => {
     const email = req.body.email.trim();
     const password = req.body.password.trim();
 
-    const user = await db.read('Users', [{column: "email", value: email}]);
-    const player = await db.read('PlayerInfo', [{column: "id", value: user[0].id}]);
-    if(user.length ==0){
-        postData = {loggedIn: false, email: null, message:"User not found"};
+    try {
+        const user = await db.read('Users', [{ column: "email", value: email }]);
 
-    }
+        if (user.length === 0) {
+            postData = { loggedIn: false, email: null, message: "User not found" };
+            return res.status(400).json(postData);
+        } else {
+            const isPasswordValid = bcrypt.compareSync(password, user[0].password);
 
-    if(user && bcrypt.compareSync(password, user[0].password))
-    {
-        req.session.user = user[0];
-        console.log(req.session.user.id);
-        postData =({loggedIn: true, id: user[0].id, firstName: user[0].firstName, lastName: user[0].lastName, email: user[0].email, points: player[0].highestScore, message:"User found"});
+            if (isPasswordValid) {
+                const player = await db.read('PlayerInfo', [{ column: "id", value: user[0].id }]);
+                req.session.user = user[0];
 
-    }
-    else{
-        postData ={loggedIn: false, email: null, message:"Invalid Password"};
+                postData = {
+                    loggedIn: true,
+                    id: user[0].id,
+                    firstName: user[0].firstName,
+                    lastName: user[0].lastName,
+                    email: user[0].email,
+                    points: player[0].highestScore,
+                    message: "User found"
+                };
+                return res.status(200).json(postData);
+            } else {
+                postData = { loggedIn: false, email: null, message: "Invalid password" };
+                return res.status(400).json(postData);
+            }
+        }
+    } catch (error) {
+        console.error('Error during sign-in:', error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 });
 
@@ -162,9 +175,17 @@ app.post("/game", async (req, res) => {
         if (points < player[0].highestScore || player[0].highestScore == -1) {
             await db.update('PlayerInfo', [{ column: 'highestScore', value: points }], [{ column: 'id', value: req.body.id}]);
             player = await db.read('PlayerInfo', [{ column: 'id', value: req.body.id}]);
-            postData = { loggedIn: true, id: user[0].id,firstName: user[0].firstName, lastName: user[0].lastName, email: user[0].email, points: player[0].highestScore, message: "User created successfully" };
+            postData = { loggedIn: true, id: user[0].id,firstName: user[0].firstName, lastName: user[0].lastName, email: user[0].email, points: player[0].highestScore,  message: "User created successfully" };
 
         }
+        const id = await db.create('GameInfo', [
+            { column: 'date', value: req.body.date },
+            { column: 'time', value: req.body.time },
+            { column: 'score', value: req.body.points },
+            { column: 'email', value: req.body.email }
+            
+        ]);
+
     }
     return res.json({ message: 'Game data received' });
 
@@ -189,6 +210,13 @@ app.post("/search", async (req, res) => {
         postUser = { loggedIn: false, firstName: "User Not Found", message: "User found" };
         return res.json(postUser);
     }
+});
+
+app.get("/api/gamedata", async (req, res) => {
+    const players = await db.read('GameInfo', [{ column: 'email', value: postData.email }]);    
+    res.json(players);
+
+
 });
 
 app.listen(port, () => {
